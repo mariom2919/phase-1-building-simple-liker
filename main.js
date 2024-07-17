@@ -2,7 +2,42 @@
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
-// Your JavaScript code goes here!
+// Event listener when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const emptyHearts = document.querySelectorAll('.like-glyph');
+  emptyHearts.forEach(heart => {
+      heart.addEventListener('click', handleLikeClick);
+  });
+});
+
+// Function to handle like click
+function handleLikeClick(event) {
+  const heart = event.target;
+  mimicServerCall()
+      .then(response => {
+          activateHeart(heart);
+      })
+      .catch(error => {
+          displayErrorModal(error);
+      });
+}
+
+// Function to activate heart on successful like
+function activateHeart(heart) {
+  heart.classList.add('activated-heart');
+  heart.innerText = FULL_HEART;
+}
+
+// Function to display error modal on server error
+function displayErrorModal(error) {
+  const modal = document.getElementById('modal');
+  const modalMessage = document.getElementById('modal-message');
+  modal.classList.remove('hidden');
+  modalMessage.textContent = error;
+  setTimeout(() => {
+      modal.classList.add('hidden');
+  }, 3000);
+}
 
 
 
